@@ -1,4 +1,4 @@
-package init
+package setup
 
 import (
 	"TinyTikTok/conf"
@@ -14,9 +14,8 @@ var Rdb *redis.Client
 
 func Redis() {
 	Rdb = redis.NewClient(&redis.Options{
-		Addr:     conf.RedisAddr,
-		Password: conf.RedisPassword, // no password set
-		DB:       conf.RedisDB,       // use default DB
+		Addr:     conf.Conf.RedisAddr,
+		Password: conf.Conf.RedisPassword, // no password set
+		DB:       conf.Conf.RedisDB,       // use default DB
 	})
-
 }

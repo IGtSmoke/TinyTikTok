@@ -1,10 +1,12 @@
 package main
 
 import (
-	"TinyTikTok/conf/init"
+	"TinyTikTok/conf"
+	"TinyTikTok/conf/setup"
 	"TinyTikTok/routers"
 	"TinyTikTok/utils"
 	"github.com/gin-gonic/gin"
+	"github.com/rs/zerolog/log"
 )
 
 func main() {
@@ -24,8 +26,12 @@ func main() {
 
 // 依赖加载
 func initDeps() {
+	err := conf.LoadConfig()
+	if err != nil {
+		log.Err(err)
+	}
 	//初始化redis连接
-	init.Redis()
-	init.Gorm()
-	init.Minio()
+	setup.Redis()
+	setup.Gorm()
+	setup.Minio()
 }

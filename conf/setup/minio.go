@@ -1,4 +1,4 @@
-package init
+package setup
 
 import (
 	"TinyTikTok/conf"
@@ -12,11 +12,10 @@ var MinioClient *minio.Client
 var Mctx context.Context
 
 func Minio() {
-
 	Mctx = context.Background()
 	// Initialize minio client object.
-	MinioClient, _ = minio.New(conf.MinioEndpoint, &minio.Options{
-		Creds: credentials.NewStaticV4(conf.MinioAccessKeyID, conf.MinioSecretAccessKey, ""),
+	MinioClient, _ = minio.New(conf.Conf.MinioEndpoint, &minio.Options{
+		Creds: credentials.NewStaticV4(conf.Conf.MinioAccessKeyID, conf.Conf.MinioSecretAccessKey, ""),
 	})
 	log.Info().Msgf("%#v\n", MinioClient)
 }

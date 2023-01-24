@@ -1,7 +1,7 @@
 package utils
 
 import (
-	"TinyTikTok/conf/init"
+	"TinyTikTok/conf/setup"
 	"github.com/gin-gonic/gin"
 	"github.com/rs/zerolog/log"
 )
@@ -26,7 +26,7 @@ func RefreshTokenInterceptor() gin.HandlerFunc {
 		}
 		tokenKey := LoginUserKey + login.Token
 		//取出userId
-		userId, err := init.Rdb.HGet(init.Rctx, tokenKey, "userId").Result()
+		userId, err := setup.Rdb.HGet(setup.Rctx, tokenKey, "userId").Result()
 		if err != nil {
 			log.Err(err)
 			c.Next()
@@ -39,7 +39,7 @@ func RefreshTokenInterceptor() gin.HandlerFunc {
 		//将userId存入context
 		c.Set("userId", userId)
 		//刷新token有效期
-		init.Rdb.Expire(init.Rctx, tokenKey, LoginUserTTL)
+		setup.Rdb.Expire(setup.Rctx, tokenKey, LoginUserTTL)
 		c.Next()
 	}
 
