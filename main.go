@@ -34,4 +34,5 @@ func initDeps() {
 	setup.Redis()
 	setup.Gorm()
 	setup.Minio()
+	setup.Snowflake()
 }
