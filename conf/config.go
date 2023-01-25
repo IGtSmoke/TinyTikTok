@@ -13,6 +13,7 @@ type Config struct {
 	DSN                  string `yaml:"dsn"`
 	SnowflakeID          int64  `yaml:"snowflakeId"`
 	BucketName           string `yaml:"bucketName"`
+	GinPort              string `yaml:"ginPort"`
 	MinioEndpoint        string `yaml:"minioEndpoint"`
 	MinioAccessKeyID     string `yaml:"minioAccessKeyId"`
 	MinioSecretAccessKey string `yaml:"minioSecretAccessKey"`
