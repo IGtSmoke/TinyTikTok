@@ -6,6 +6,7 @@ import (
 	"github.com/rs/zerolog/log"
 )
 
+// Login 用户登录Token信息
 type Login struct {
 	Token string `form:"token"  json:"token" uri:"token" xml:"token"`
 }
@@ -28,7 +29,7 @@ func RefreshTokenInterceptor() gin.HandlerFunc {
 
 		tokenKey := LoginUserKey + login.Token
 		// 取出userId
-		userId, err := setup.Rdb.HGet(setup.Rctx, tokenKey, "userId").Result()
+		userID, err := setup.Rdb.HGet(setup.Rctx, tokenKey, "userID").Result()
 		if err != nil {
 			log.Err(err)
 			ctx.Next()
@@ -36,13 +37,13 @@ func RefreshTokenInterceptor() gin.HandlerFunc {
 			return
 		}
 
-		if userId == "" {
+		if userID == "" {
 			ctx.Next()
 
 			return
 		}
 		// 将userId存入context
-		ctx.Set("userId", userId)
+		ctx.Set("userID", userID)
 		// 刷新token有效期
 		setup.Rdb.Expire(setup.Rctx, tokenKey, LoginUserTTL)
 		ctx.Next()

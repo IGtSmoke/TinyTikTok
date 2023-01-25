@@ -1,3 +1,4 @@
+// Package main as the entry point of the program
 package main
 
 import (
@@ -18,17 +19,15 @@ func main() {
 
 	// 依赖加载
 	initDeps()
-	
-	err := ginServer.Run()
-	if err != nil {
+
+	if err := ginServer.Run(); err != nil {
 		panic("无法启动项目:ginServer.Run失败")
 	}
 }
 
 // 依赖加载
 func initDeps() {
-	err := conf.LoadConfig()
-	if err != nil {
+	if err := conf.LoadConfig(); err != nil {
 		log.Err(err)
 	}
 	// 初始化redis连接

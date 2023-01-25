@@ -11,18 +11,20 @@ import (
 // Config Global configuration variables
 type Config struct {
 	DSN                  string `yaml:"dsn"`
-	SnowflakeID          int64  `yaml:"snowflakeID"`
+	SnowflakeID          int64  `yaml:"snowflakeId"`
 	BucketName           string `yaml:"bucketName"`
 	MinioEndpoint        string `yaml:"minioEndpoint"`
-	MinioAccessKeyID     string `yaml:"minioAccessKeyID"`
+	MinioAccessKeyID     string `yaml:"minioAccessKeyId"`
 	MinioSecretAccessKey string `yaml:"minioSecretAccessKey"`
 	RedisAddr            string `yaml:"redisAddr"`
 	RedisPassword        string `yaml:"redisPassword"`
 	RedisDB              int    `yaml:"redisDb"`
 }
 
+// Conf Global configuration variables
 var Conf *Config
 
+// LoadConfig Load configuration file to global variables
 func LoadConfig() error {
 	ymlFile, err := ioutil.ReadFile("config/config.yaml")
 	if err != nil {
@@ -36,5 +38,6 @@ func LoadConfig() error {
 
 		return err
 	}
+
 	return nil
 }

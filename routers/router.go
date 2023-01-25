@@ -1,3 +1,4 @@
+// Package routers contains router functions
 package routers
 
 import (
