@@ -4,7 +4,7 @@ import (
 	"TinyTikTok/conf"
 	"github.com/rs/zerolog/log"
 	"gorm.io/driver/mysql"
-	"gorm.io/gorm"
+	gorm "gorm.io/gorm"
 )
 
 var Mdb *gorm.DB

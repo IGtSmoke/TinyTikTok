@@ -3,7 +3,7 @@ package setup
 import (
 	"TinyTikTok/conf"
 	"context"
-	"github.com/go-redis/redis/v9"
+	redis "github.com/go-redis/redis/v9"
 )
 
 // Rctx redis空白上下文
