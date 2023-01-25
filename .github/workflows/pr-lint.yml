@@ -26,5 +26,4 @@ jobs:
         uses: reviewdog/action-golangci-lint@v2
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          go_version: '1.19'
-          golangci_lint_flags: "--enable-all --exclude-use-default=false"
+          golangci_lint_flags: "--config=.github/.golangci.yml"
