@@ -2,6 +2,7 @@
 package routers
 
 import (
+	"TinyTikTok/controller"
 	"TinyTikTok/utils"
 	"github.com/gin-gonic/gin"
 )
@@ -13,9 +14,9 @@ func InitRouter(ginServer *gin.Engine) {
 	apiRouter.GET("/feed/")
 	apiRouter.POST("/publish/action/")
 	apiRouter.GET("/publish/list/")
-	apiRouter.GET("/user/")
-	apiRouter.POST("/user/register/")
-	apiRouter.POST("/user/login/")
+	apiRouter.GET("/user/", controller.UserInfo)
+	apiRouter.POST("/user/register/", controller.Register)
+	apiRouter.POST("/user/login/", controller.Login)
 	// 互动接口
 	apiRouter.POST("/favorite/action/")
 	apiRouter.GET("/favorite/list/")
