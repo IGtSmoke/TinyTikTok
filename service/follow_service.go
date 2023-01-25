@@ -1,3 +1,4 @@
+// Package service contains interfaces for services
 package service
 
 import "github.com/gin-gonic/gin"

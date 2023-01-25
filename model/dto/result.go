@@ -1,26 +1,26 @@
 package dto
 
-// Result 默认结构体
+// Result 默认结构体.
 type Result struct {
 	// 必须大写，才能序列化
 	StatusCode int64  `json:"statusCode"` // 状态码，0-成功，其他值-失败
 	StatusMsg  string `json:"statusMsg"`  // 返回状态描述
 }
 
-// UserLoginResponse 用户登录返回结构体
+// UserLoginResponse 用户登录返回结构体.
 type UserLoginResponse struct {
 	Result
 	UserID int64  `json:"userId,omitempty"`
 	Token  string `json:"token"`
 }
 
-// UserInfoResponse 用户信息返回结构体
+// UserInfoResponse 用户信息返回结构体.
 type UserInfoResponse struct {
 	Result
 	User User `json:"user"` // 用户信息
 }
 
-// PublishListResponse 视频列表返回结构体
+// PublishListResponse 视频列表返回结构体.
 type PublishListResponse struct {
 	Result
 	VideoList []Video `json:"videoList"` // 用户发布的视频列表

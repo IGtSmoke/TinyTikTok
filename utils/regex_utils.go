@@ -14,6 +14,7 @@ func mismatch(str string, regex string) bool {
 	}
 	fmt.Print(str)
 	matched, _ := regexp.MatchString(regex, str)
+
 	return !matched
 }
 

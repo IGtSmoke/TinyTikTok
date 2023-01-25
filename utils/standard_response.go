@@ -1,9 +1,10 @@
 package utils
 
 import (
+	"net/http"
+
 	"TinyTikTok/model/dto"
 	"github.com/gin-gonic/gin"
-	"net/http"
 )
 
 /*
@@ -19,7 +20,6 @@ Fail 请求失败
 @param errorMsg 返回错误信息
 */
 func Fail(c *gin.Context, errorMsg string) {
-
 	c.JSON(http.StatusForbidden, dto.Result{
 		StatusCode: -1,
 		StatusMsg:  errorMsg,

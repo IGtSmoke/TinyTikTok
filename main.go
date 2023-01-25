@@ -12,12 +12,13 @@ import (
 func main() {
 	ginServer := gin.Default()
 
-	//以下的接口，都使用RefreshTokenInterceptor()中间件身份验证
+	// 以下的接口，都使用RefreshTokenInterceptor()中间件身份验证
 	ginServer.Use(utils.RefreshTokenInterceptor())
 	routers.InitRouter(ginServer)
 
-	//依赖加载
+	// 依赖加载
 	initDeps()
+	
 	err := ginServer.Run()
 	if err != nil {
 		panic("无法启动项目:ginServer.Run失败")
@@ -30,7 +31,7 @@ func initDeps() {
 	if err != nil {
 		log.Err(err)
 	}
-	//初始化redis连接
+	// 初始化redis连接
 	setup.Redis()
 	setup.Gorm()
 	setup.Minio()

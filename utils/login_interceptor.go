@@ -1,3 +1,4 @@
+// Package utils contains utility functions
 package utils
 
 import (
@@ -6,22 +7,22 @@ import (
 
 // LoginInterceptor 用户是否有访问权限(是否登录)
 func LoginInterceptor() gin.HandlerFunc {
-	return func(c *gin.Context) {
-		value, exists := c.Get("userId")
+	return func(ctx *gin.Context) {
+		value, exists := ctx.Get("userId")
 		if !exists {
-			Fail(c, "无权限访问")
-			c.Abort()
+			Fail(ctx, "无权限访问")
+			ctx.Abort()
 
 			return
 		}
 
 		if value == "" {
-			Fail(c, "无权限访问")
-			c.Abort()
+			Fail(ctx, "无权限访问")
+			ctx.Abort()
 
 			return
 		}
-		
-		c.Next()
+
+		ctx.Next()
 	}
 }

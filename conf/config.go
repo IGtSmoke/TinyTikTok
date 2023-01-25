@@ -1,13 +1,14 @@
-// Package conf
-// Contains global configuration variables / Load configuration file to global variables
+// Package conf contains global configuration variables / Load configuration file to global variables
 package conf
 
 import (
+	"io/ioutil"
+
 	"github.com/rs/zerolog/log"
 	yaml "gopkg.in/yaml.v3"
-	"io/ioutil"
 )
 
+// Config Global configuration variables
 type Config struct {
 	DSN                  string `yaml:"dsn"`
 	SnowflakeID          int64  `yaml:"snowflakeID"`

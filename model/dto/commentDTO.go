@@ -3,6 +3,7 @@ package dto
 
 import "time"
 
+// CommentDTO 评论信息
 type CommentDTO struct {
 	UserID      int64     // 评论用户id
 	VideoID     int64     // 视频id

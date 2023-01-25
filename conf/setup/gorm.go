@@ -1,3 +1,4 @@
+// Package setup contains setup functions for initializing dependencies
 package setup
 
 import (
@@ -13,6 +14,7 @@ var Mdb *gorm.DB
 // Gorm Initialize MySQL client
 func Gorm() {
 	var err error
+	
 	Mdb, err = gorm.Open(mysql.Open(conf.Conf.DSN), &gorm.Config{})
 	if err != nil {
 		log.Err(err)
