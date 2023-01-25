@@ -10,17 +10,17 @@ import (
 )
 
 func main() {
-	r := gin.Default()
+	ginServer := gin.Default()
 
 	//以下的接口，都使用RefreshTokenInterceptor()中间件身份验证
-	r.Use(utils.RefreshTokenInterceptor())
-	routers.InitRouter(r)
+	ginServer.Use(utils.RefreshTokenInterceptor())
+	routers.InitRouter(ginServer)
 
 	//依赖加载
 	initDeps()
-	err := r.Run()
+	err := ginServer.Run()
 	if err != nil {
-		panic("无法启动项目:r.Run失败")
+		panic("无法启动项目:ginServer.Run失败")
 	}
 }
 

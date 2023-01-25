@@ -22,6 +22,7 @@ func RefreshTokenInterceptor() gin.HandlerFunc {
 		//不存在token
 		if login.Token == "" {
 			c.Next()
+
 			return
 		}
 		tokenKey := LoginUserKey + login.Token
@@ -30,10 +31,12 @@ func RefreshTokenInterceptor() gin.HandlerFunc {
 		if err != nil {
 			log.Err(err)
 			c.Next()
+
 			return
 		}
 		if userId == "" {
 			c.Next()
+
 			return
 		}
 		//将userId存入context
@@ -42,5 +45,4 @@ func RefreshTokenInterceptor() gin.HandlerFunc {
 		setup.Rdb.Expire(setup.Rctx, tokenKey, LoginUserTTL)
 		c.Next()
 	}
-
 }

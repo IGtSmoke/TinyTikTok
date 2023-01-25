@@ -10,7 +10,7 @@ type Result struct {
 // UserLoginResponse 用户登录返回结构体
 type UserLoginResponse struct {
 	Result
-	UserID int64  `json:"userID,omitempty"`
+	UserID int64  `json:"userId,omitempty"`
 	Token  string `json:"token"`
 }
 

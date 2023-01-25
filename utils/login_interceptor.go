@@ -11,14 +11,17 @@ func LoginInterceptor() gin.HandlerFunc {
 		if !exists {
 			Fail(c, "无权限访问")
 			c.Abort()
+
 			return
 		}
 
 		if value == "" {
 			Fail(c, "无权限访问")
 			c.Abort()
+
 			return
 		}
+		
 		c.Next()
 	}
 }
