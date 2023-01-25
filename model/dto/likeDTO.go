@@ -1,7 +1,7 @@
 package dto
 
 type Like struct {
-	UserId  int64
-	VideoId int64
+	UserID  int64
+	VideoID int64
 	Cancel  int8
 }

@@ -1,3 +1,5 @@
+// Package conf
+// Contains global configuration variables / Load configuration file to global variables
 package conf
 
 import (
@@ -8,7 +10,7 @@ import (
 
 type Config struct {
 	DSN                  string `yaml:"DSN"`
-	SnowflakeId          int64  `yaml:"SnowflakeId"`
+	SnowflakeID          int64  `yaml:"SnowflakeID"`
 	BucketName           string `yaml:"BucketName"`
 	MinioEndpoint        string `yaml:"MinioEndpoint"`
 	MinioAccessKeyID     string `yaml:"MinioAccessKeyID"`

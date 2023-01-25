@@ -1,5 +1,5 @@
 DSN: root:003127@tcp(127.0.0.1:3306)/tiktok?charset=utf8mb4&parseTime=True&loc=Local
-SnowflakeId: 1
+SnowflakeID: 1
 BucketName: videos
 MinioEndpoint: localhost:9000
 MinioAccessKeyID: minioadmin

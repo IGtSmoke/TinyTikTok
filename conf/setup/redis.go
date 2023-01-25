@@ -12,6 +12,7 @@ var Rctx = context.Background()
 // Rdb redisClient
 var Rdb *redis.Client
 
+// Redis Initialize Redis client
 func Redis() {
 	Rdb = redis.NewClient(&redis.Options{
 		Addr:     conf.Conf.RedisAddr,

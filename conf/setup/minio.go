@@ -8,9 +8,13 @@ import (
 	"github.com/rs/zerolog/log"
 )
 
+// MinioClient Export global Minio client
 var MinioClient *minio.Client
+
+// Mctx Export global minio client context
 var Mctx context.Context
 
+// Minio Initialize Minio client
 func Minio() {
 	Mctx = context.Background()
 	// Initialize minio client object.
