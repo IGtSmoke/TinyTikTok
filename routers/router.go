@@ -1,3 +1,4 @@
+// Package routers contains router functions
 package routers
 
 import (
@@ -6,8 +7,8 @@ import (
 )
 
 // InitRouter 初始化路由
-func InitRouter(r *gin.Engine) {
-	apiRouter := r.Group("/douyin")
+func InitRouter(ginServer *gin.Engine) {
+	apiRouter := ginServer.Group("/douyin")
 	// 基础接口
 	apiRouter.GET("/feed/")
 	apiRouter.POST("/publish/action/")
@@ -26,7 +27,7 @@ func InitRouter(r *gin.Engine) {
 	apiRouter.GET("/relation/follower/list")
 
 	// 404
-	r.NoRoute(func(c *gin.Context) {
+	ginServer.NoRoute(func(c *gin.Context) {
 		utils.Fail(c, "bad router")
 	})
 }

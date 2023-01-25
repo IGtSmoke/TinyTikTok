@@ -1,7 +1,8 @@
 package dto
 
+// UserDTO 用户信息
 type UserDTO struct {
-	UserId   int64
+	UserID   int64
 	UserName string
 	Password string
 }

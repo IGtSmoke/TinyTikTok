@@ -1,3 +1,4 @@
+// Package controller contains implementation of interface
 package controller
 
 import (
