@@ -8,4 +8,6 @@ type UserService interface {
 	Login(c *gin.Context)
 	// Register 用户注册
 	Register(c *gin.Context)
+	// User 用户信息
+	User(c *gin.Context)
 }
