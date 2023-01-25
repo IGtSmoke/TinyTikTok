@@ -2,7 +2,7 @@
 package conf
 
 import (
-	"io/ioutil"
+	"os"
 
 	"github.com/rs/zerolog/log"
 	yaml "gopkg.in/yaml.v3"
@@ -26,7 +26,7 @@ var Conf *Config
 
 // LoadConfig Load configuration file to global variables
 func LoadConfig() error {
-	ymlFile, err := ioutil.ReadFile("config/config.yaml")
+	ymlFile, err := os.ReadFile("./conf/config.yaml")
 	if err != nil {
 		log.Error().Err(err).Msg("Failed to read config file")
 

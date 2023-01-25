@@ -29,21 +29,19 @@ func RefreshTokenInterceptor() gin.HandlerFunc {
 
 		tokenKey := LoginUserKey + login.Token
 		// 取出userId
-		userID, err := setup.Rdb.HGet(setup.Rctx, tokenKey, "userID").Result()
+		userId, err := setup.Rdb.HGet(setup.Rctx, tokenKey, "userId").Result()
 		if err != nil {
 			log.Err(err)
 			ctx.Next()
-
 			return
 		}
 
-		if userID == "" {
+		if userId == "" {
 			ctx.Next()
-
 			return
 		}
 		// 将userId存入context
-		ctx.Set("userID", userID)
+		ctx.Set("userId", userId)
 		// 刷新token有效期
 		setup.Rdb.Expire(setup.Rctx, tokenKey, LoginUserTTL)
 		ctx.Next()
