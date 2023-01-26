@@ -20,7 +20,7 @@ func main() {
 	// 依赖加载
 	initDeps()
 
-	if err := ginServer.Run(); err != nil {
+	if err := ginServer.Run(":" + conf.Conf.GinPort); err != nil {
 		panic("无法启动项目:ginServer.Run失败")
 	}
 }
