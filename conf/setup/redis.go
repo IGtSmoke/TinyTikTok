@@ -5,7 +5,7 @@ import (
 
 	"TinyTikTok/conf"
 
-	redis "github.com/go-redis/redis/v9"
+	"github.com/go-redis/redis/v9"
 )
 
 // Rctx redis空白上下文

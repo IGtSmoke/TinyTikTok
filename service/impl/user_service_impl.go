@@ -29,10 +29,12 @@ func (usi *UserServiceImpl) Login(c *gin.Context) {
 	user := dao.SearchUserByUserName(username)
 	if (user == dto.UserDTO{}) {
 		utils.Fail(c, "当前用户不存在")
+		return
 	}
 
 	if user.Password != password {
 		utils.Fail(c, "账号和密码不匹配")
+		return
 	}
 	//登录成功
 	//生成token
@@ -87,7 +89,6 @@ func (usi *UserServiceImpl) Register(c *gin.Context) {
 	tokenKey := utils.LoginUserKey + token
 	//通过管道包装发送到redis的用户信息
 	if _, err := setup.Rdb.Pipelined(setup.Rctx, func(rdb redis.Pipeliner) error {
-		rdb.HSet(setup.Rctx, tokenKey, "userName", user.UserName)
 		rdb.HSet(setup.Rctx, tokenKey, "userId", user.UserID)
 		rdb.Expire(setup.Rctx, tokenKey, utils.LoginUserTTL)
 		return nil
@@ -114,7 +115,7 @@ func (usi *UserServiceImpl) UserInfo(c *gin.Context) {
 	}
 	myuserId, exists := c.Get("userId")
 	if exists == false {
-		log.Error().Msg("[UserInfo]无法得到userDTO")
+		log.Error().Msg("[UserInfo]无法得到userId")
 	}
 	myId := myuserId.(string)
 	parseInt, err := strconv.ParseInt(myId, 10, 64)

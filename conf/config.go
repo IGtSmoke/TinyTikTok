@@ -2,17 +2,17 @@
 package conf
 
 import (
-	"os"
-
 	"github.com/rs/zerolog/log"
-	yaml "gopkg.in/yaml.v3"
+	"gopkg.in/yaml.v3"
+	"os"
 )
 
 // Config Global configuration variables
 type Config struct {
 	DSN                  string `yaml:"dsn"`
 	SnowflakeID          int64  `yaml:"snowflakeId"`
-	BucketName           string `yaml:"bucketName"`
+	VideoBucketName      string `yaml:"videoBucketName"`
+	CoverBucketName      string `yaml:"coverBucketName"`
 	MinioEndpoint        string `yaml:"minioEndpoint"`
 	MinioAccessKeyID     string `yaml:"minioAccessKeyId"`
 	MinioSecretAccessKey string `yaml:"minioSecretAccessKey"`

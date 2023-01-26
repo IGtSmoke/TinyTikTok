@@ -12,7 +12,7 @@ func InitRouter(ginServer *gin.Engine) {
 	apiRouter := ginServer.Group("/douyin")
 	// 基础接口
 	apiRouter.GET("/feed/")
-	apiRouter.POST("/publish/action/")
+	apiRouter.POST("/publish/action/", controller.Action)
 	apiRouter.GET("/publish/list/")
 	apiRouter.GET("/user/", controller.UserInfo)
 	apiRouter.POST("/user/register/", controller.Register)
