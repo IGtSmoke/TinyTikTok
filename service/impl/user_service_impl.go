@@ -24,6 +24,7 @@ func (usi *UserServiceImpl) Login(c *gin.Context) {
 
 	if utils.PasswordInvalid(password) {
 		utils.Fail(c, "密码无效")
+		return
 	}
 
 	user := dao.SearchUserByUserName(username)
@@ -64,6 +65,7 @@ func (usi *UserServiceImpl) Register(c *gin.Context) {
 	//根据username查询用户是否存在
 	if utils.PasswordInvalid(password) {
 		utils.Fail(c, "密码无效")
+		return
 	}
 	user := dao.SearchUserByUserName(username)
 	if (user != dto.UserDTO{}) {
@@ -116,6 +118,8 @@ func (usi *UserServiceImpl) UserInfo(c *gin.Context) {
 	myuserId, exists := c.Get("userId")
 	if exists == false {
 		log.Error().Msg("[UserInfo]无法得到userId")
+		utils.Fail(c, "bad param")
+		return
 	}
 	myId := myuserId.(string)
 	parseInt, err := strconv.ParseInt(myId, 10, 64)
