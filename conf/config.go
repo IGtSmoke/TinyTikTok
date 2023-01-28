@@ -5,6 +5,7 @@ import (
 	"github.com/rs/zerolog/log"
 	"gopkg.in/yaml.v3"
 	"os"
+	"runtime"
 )
 
 // Config Global configuration variables
@@ -27,7 +28,8 @@ var Conf *Config
 
 // LoadConfig Load configuration file to global variables
 func LoadConfig() error {
-	ymlFile, err := os.ReadFile("./conf/config.yaml")
+	_, filename, _, _ := runtime.Caller(0)
+	ymlFile, err := os.ReadFile(filename[:len(filename)-len("config.go")] + "config.yaml")
 	if err != nil {
 		log.Error().Err(err).Msg("Failed to read config file")
 
