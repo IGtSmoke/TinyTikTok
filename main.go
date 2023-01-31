@@ -13,7 +13,7 @@ import (
 func main() {
 	ginServer := gin.Default()
 
-	// 以下的接口，都使用RefreshTokenInterceptor()中间件身份验证
+	// 使用RefreshTokenInterceptor()中间件身份验证
 	ginServer.Use(utils.RefreshTokenInterceptor())
 	routers.InitRouter(ginServer)
 

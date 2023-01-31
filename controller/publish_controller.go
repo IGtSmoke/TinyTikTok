@@ -15,5 +15,9 @@ func Action(c *gin.Context) {
 
 // List 视频列表
 func List(c *gin.Context) {
+	psi.List(c)
+}
 
+func Feed(c *gin.Context) {
+	psi.Feed(c)
 }

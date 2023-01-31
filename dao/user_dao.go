@@ -8,12 +8,12 @@ import (
 	"gorm.io/gorm"
 )
 
-type UserPo struct {
+type UserPO struct {
 	gorm.Model
 	dto.UserDTO
 }
 
-func (u UserPo) TableName() string {
+func (u UserPO) TableName() string {
 	return "users"
 }
 
@@ -21,7 +21,7 @@ func (u UserPo) TableName() string {
 func SearchUserByUserName(username string) dto.UserDTO {
 	user := dto.UserDTO{}
 	//查询用户信息
-	err := setup.Mdb.Model(&UserPo{}).Where("user_name = ?", username).Find(&user).Error
+	err := setup.Mdb.Model(&UserPO{}).Where("user_name = ?", username).Find(&user).Error
 	if err != nil {
 		log.Err(err)
 	}
@@ -40,7 +40,7 @@ func SaveUser(userDTO *dto.UserDTO) bool {
 	//加密
 	userDTO.Password = utils.Base64Encode([]byte(userDTO.Password))
 	//插入对象
-	err := setup.Mdb.Create(&UserPo{
+	err := setup.Mdb.Create(&UserPO{
 		UserDTO: *userDTO,
 	}).Error
 	if err != nil {
@@ -53,7 +53,7 @@ func SaveUser(userDTO *dto.UserDTO) bool {
 // SearchUserByUserId  根据userId查询用户信息
 func SearchUserByUserId(userId int64) dto.UserDTO {
 	userDTO := dto.UserDTO{}
-	err := setup.Mdb.Model(&UserPo{}).Where("user_id = ?", userId).Find(&userDTO).Error
+	err := setup.Mdb.Model(&UserPO{}).Where("user_id = ?", userId).Find(&userDTO).Error
 	if err != nil {
 		log.Err(err)
 	}

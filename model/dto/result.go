@@ -26,6 +26,12 @@ type PublishListResponse struct {
 	VideoList []Video `json:"video_list"` // 用户发布的视频列表
 }
 
+type PublishFeedResponse struct {
+	NextTime *int64 `json:"next_time"` // 本次返回的视频中，发布最早的时间，作为下次请求时的latest_time
+	Result
+	VideoList []Video `json:"video_list"` // 视频列表
+}
+
 // User 组装响应体user信息
 type User struct {
 	FollowCount   int64  `json:"follow_count"`   // 关注总数

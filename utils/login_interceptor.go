@@ -3,23 +3,21 @@ package utils
 
 import (
 	"github.com/gin-gonic/gin"
+	"github.com/rs/zerolog/log"
 )
 
 // LoginInterceptor 用户是否有访问权限(是否登录)
 func LoginInterceptor() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
-		value, exists := ctx.Get("userID")
-		if !exists {
-			Fail(ctx, "无权限访问")
+		userId, err := GetUserIdByMiddleware(ctx)
+		if err != nil {
+			log.Err(err).Msg("LoginInterceptor中userId不存在")
 			ctx.Abort()
-
 			return
 		}
-
-		if value == "" {
-			Fail(ctx, "无权限访问")
+		if userId == 0 {
+			Fail(ctx, "LoginInterceptor中userId不存在")
 			ctx.Abort()
-
 			return
 		}
 

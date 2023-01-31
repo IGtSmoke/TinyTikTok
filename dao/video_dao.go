@@ -4,6 +4,7 @@ import (
 	"TinyTikTok/conf/setup"
 	"TinyTikTok/model/dto"
 	"gorm.io/gorm"
+	"time"
 )
 
 type VideoPO struct {
@@ -19,4 +20,21 @@ func SaveVideo(videoDTO dto.VideoDTO) {
 	setup.Mdb.Create(&VideoPO{
 		VideoDTO: videoDTO,
 	})
+}
+
+func GetVideosByAuthorId(authorId int64) []dto.VideoDTO {
+	var videoDTOS []dto.VideoDTO
+	setup.Mdb.Model(&VideoPO{}).Where("author_id = ?", authorId).Order("created_at DESC").Find(&videoDTOS)
+	return videoDTOS
+}
+
+func GetVideosAndNextTimeByLastTime(lastTime time.Time) ([]dto.VideoDTO, time.Time) {
+	var videoDTOS []dto.VideoDTO
+	setup.Mdb.Model(&VideoPO{}).Where("updated_at < ?", lastTime).Order("updated_at desc").Limit(30).Find(&videoDTOS)
+	var nextTime time.Time
+	if len(videoDTOS) == 0 {
+		return videoDTOS, lastTime
+	}
+	setup.Mdb.Model(&VideoPO{}).Select("updated_at").Where("id = ?", videoDTOS[len(videoDTOS)-1].ID).Find(&nextTime)
+	return videoDTOS, nextTime
 }

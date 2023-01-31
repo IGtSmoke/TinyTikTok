@@ -6,6 +6,8 @@ import (
 	"TinyTikTok/model/dto"
 	"TinyTikTok/service"
 	"TinyTikTok/utils"
+	"errors"
+	"github.com/duke-git/lancet/v2/validator"
 	"github.com/gin-gonic/gin"
 	"github.com/go-redis/redis/v9"
 	"github.com/google/uuid"
@@ -19,16 +21,15 @@ type UserServiceImpl struct {
 
 // Login 用户登录
 func (usi *UserServiceImpl) Login(c *gin.Context) {
-	username := c.Query("username")
-	password := c.Query("password")
+	username, password, err := getUsernameAndPassword(c)
 
-	if utils.PasswordInvalid(password) {
-		utils.Fail(c, "密码无效")
+	if err != nil {
+		utils.Fail(c, "用户名或密码格式错误")
 		return
 	}
 
 	user := dao.SearchUserByUserName(username)
-	if (user == dto.UserDTO{}) {
+	if user == (dto.UserDTO{}) {
 		utils.Fail(c, "当前用户不存在")
 		return
 	}
@@ -60,11 +61,10 @@ func (usi *UserServiceImpl) Login(c *gin.Context) {
 // Register 用户注册
 func (usi *UserServiceImpl) Register(c *gin.Context) {
 	//接收邮箱和密码
-	username := c.Query("username")
-	password := c.Query("password")
-	//根据username查询用户是否存在
-	if utils.PasswordInvalid(password) {
-		utils.Fail(c, "密码无效")
+	username, password, err := getUsernameAndPassword(c)
+
+	if err != nil {
+		utils.Fail(c, "用户名或密码格式错误")
 		return
 	}
 	user := dao.SearchUserByUserName(username)
@@ -115,18 +115,16 @@ func (usi *UserServiceImpl) UserInfo(c *gin.Context) {
 	if err != nil {
 		log.Err(err)
 	}
-	myuserId, exists := c.Get("userId")
-	if exists == false {
-		log.Error().Msg("[UserInfo]无法得到userId")
-		utils.Fail(c, "bad param")
+	myId, err := utils.GetUserIdByMiddleware(c)
+	if err != nil {
+		log.Err(err).Msg("[PublishServiceImpl]List中获取userId失败")
+		utils.Fail(c, "获取失败")
 		return
 	}
-	myId := myuserId.(string)
-	parseInt, err := strconv.ParseInt(myId, 10, 64)
 	if err != nil {
 		log.Err(err)
 	}
-	userInfo := GetUserInfo(parseInt, userId)
+	userInfo := GetUserInfo(myId, userId)
 	response := dto.UserInfoResponse{
 		User: userInfo,
 	}
@@ -164,4 +162,14 @@ func GetUserInfo(myId int64, userId int64) dto.User {
 		Name:          userDTO.UserName,
 	}
 	return user
+}
+
+func getUsernameAndPassword(c *gin.Context) (username string, password string, err error) {
+	username = c.Query("username")
+	password = c.Query("password")
+
+	if validator.IsEmptyString(username) || utils.PasswordInvalid(password) {
+		return "", "", errors.New("用户名或密码格式错误")
+	}
+	return
 }
