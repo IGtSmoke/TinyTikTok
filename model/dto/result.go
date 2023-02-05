@@ -47,5 +47,5 @@ type Video struct {
 	CommentCount  int64 `json:"comment_count"`  // 视频的评论总数
 	FavoriteCount int64 `json:"favorite_count"` // 视频的点赞总数
 	IsFavorite    bool  `json:"is_favorite"`    // true-已点赞，false-未点赞
-	VideoDTO      VideoDTO
+	VideoDTO
 }

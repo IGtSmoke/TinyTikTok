@@ -30,11 +30,12 @@ func GetVideosByAuthorId(authorId int64) []dto.VideoDTO {
 
 func GetVideosAndNextTimeByLastTime(lastTime time.Time) ([]dto.VideoDTO, time.Time) {
 	var videoDTOS []dto.VideoDTO
+	//todo 传入时间有误 year is not in the range [1, 9999]: 55065
 	setup.Mdb.Model(&VideoPO{}).Where("updated_at < ?", lastTime).Order("updated_at desc").Limit(30).Find(&videoDTOS)
 	var nextTime time.Time
 	if len(videoDTOS) == 0 {
 		return videoDTOS, lastTime
 	}
-	setup.Mdb.Model(&VideoPO{}).Select("updated_at").Where("id = ?", videoDTOS[len(videoDTOS)-1].ID).Find(&nextTime)
+	setup.Mdb.Model(&VideoPO{}).Select("updated_at").Where("id = ?", videoDTOS[len(videoDTOS)-1].Id).Find(&nextTime)
 	return videoDTOS, nextTime
 }

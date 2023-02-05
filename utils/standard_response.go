@@ -1,6 +1,7 @@
 package utils
 
 import (
+	"github.com/rs/zerolog/log"
 	"net/http"
 
 	"TinyTikTok/model/dto"
@@ -30,4 +31,10 @@ func Fail(c *gin.Context, errorMsg string) {
 func InitSuccessResult(r *dto.Result) {
 	r.StatusCode = 0
 	r.StatusMsg = ""
+}
+
+func FailResponse(c *gin.Context, err error) {
+	log.Err(err)
+	Fail(c, err.Error())
+	return
 }
