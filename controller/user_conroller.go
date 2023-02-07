@@ -6,7 +6,6 @@ import (
 	"errors"
 	"github.com/duke-git/lancet/v2/validator"
 	"github.com/gin-gonic/gin"
-	"github.com/rs/zerolog/log"
 	"strconv"
 )
 
@@ -14,16 +13,15 @@ var usi = impl.UserServiceImpl{}
 
 // Login 用户登录
 func Login(c *gin.Context) {
+	//获取用户名和密码
 	username, password, err := getUsernameAndPassword(c)
 	if err != nil {
-		log.Err(err)
-		utils.Fail(c, err.Error())
+		utils.Fail(c, err)
 		return
 	}
 	response, err := usi.Login(username, password)
 	if err != nil {
-		log.Err(err)
-		utils.Fail(c, err.Error())
+		utils.Fail(c, err)
 		return
 	} else {
 		utils.Success(c, response)
@@ -35,12 +33,12 @@ func Login(c *gin.Context) {
 func Register(c *gin.Context) {
 	username, password, err := getUsernameAndPassword(c)
 	if err != nil {
-		utils.FailResponse(c, err)
+		utils.Fail(c, err)
 		return
 	}
 	response, err := usi.Register(username, password)
 	if err != nil {
-		utils.FailResponse(c, err)
+		utils.Fail(c, err)
 		return
 	} else {
 		utils.Success(c, response)
@@ -52,17 +50,17 @@ func UserInfo(c *gin.Context) {
 	value := c.Query("user_id")
 	userId, err := strconv.ParseInt(value, 10, 64)
 	if err != nil {
-		utils.FailResponse(c, err)
+		utils.Fail(c, err)
 		return
 	}
 	myId, err := utils.GetUserIdByMiddleware(c)
 	if err != nil {
-		utils.FailResponse(c, err)
+		utils.Fail(c, err)
 		return
 	}
 	response, err := usi.UserInfo(myId, userId)
 	if err != nil {
-		utils.FailResponse(c, err)
+		utils.Fail(c, err)
 		return
 	} else {
 		utils.Success(c, response)

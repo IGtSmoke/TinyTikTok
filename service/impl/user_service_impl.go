@@ -9,7 +9,6 @@ import (
 	"errors"
 	"github.com/go-redis/redis/v9"
 	"github.com/google/uuid"
-	"github.com/rs/zerolog/log"
 	"strconv"
 )
 
@@ -38,7 +37,7 @@ func (usi *UserServiceImpl) Login(username string, password string) (dto.UserLog
 		rdb.Expire(setup.Rctx, tokenKey, utils.LoginUserTTL)
 		return nil
 	}); err != nil {
-		log.Err(err)
+		setup.Logger("common").Err(err).Send()
 	}
 	//返回token和用户id
 
@@ -76,7 +75,7 @@ func (usi *UserServiceImpl) Register(username string, password string) (dto.User
 		rdb.Expire(setup.Rctx, tokenKey, utils.LoginUserTTL)
 		return nil
 	}); err != nil {
-		log.Err(err)
+		setup.Logger("common").Err(err).Send()
 	}
 
 	//返回token和用户id
@@ -112,7 +111,7 @@ func GetUserInfo(myId int64, userId int64) dto.User {
 	pipeline.SIsMember(setup.Rctx, fansKey, myId)
 	exec, err := pipeline.Exec(setup.Rctx)
 	if err != nil {
-		log.Err(err)
+		setup.Logger("common").Err(err).Send()
 	}
 	//获得结果
 	fansCount := exec[0].(*redis.IntCmd).Val()

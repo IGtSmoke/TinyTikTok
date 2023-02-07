@@ -4,6 +4,7 @@ package routers
 import (
 	"TinyTikTok/controller"
 	"TinyTikTok/utils"
+	"errors"
 	"github.com/gin-gonic/gin"
 )
 
@@ -32,6 +33,6 @@ func InitRouter(ginServer *gin.Engine) {
 
 	// 404
 	ginServer.NoRoute(func(c *gin.Context) {
-		utils.Fail(c, "bad router")
+		utils.Fail(c, errors.New("bad router"))
 	})
 }

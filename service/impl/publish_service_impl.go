@@ -11,8 +11,8 @@ import (
 	"errors"
 	"github.com/go-redis/redis/v9"
 	"github.com/google/uuid"
-	"github.com/rs/zerolog/log"
 	"mime/multipart"
+	"runtime/debug"
 	"strconv"
 	"strings"
 	"time"
@@ -32,7 +32,7 @@ func (p PublishServiceImpl) Action(userId int64, title string, data *multipart.F
 	defer func(file multipart.File) {
 		err := file.Close()
 		if err != nil {
-			log.Err(err)
+			setup.Logger("common").Err(err).Send()
 		}
 	}(file)
 	//上传视频到minio
@@ -96,7 +96,9 @@ func (p PublishServiceImpl) Action(userId int64, title string, data *multipart.F
 func (p PublishServiceImpl) List(myId int64, userIdStr string) (dto.PublishListResponse, error) {
 	response := dto.PublishListResponse{}
 	authorId, err := strconv.ParseInt(userIdStr, 10, 64)
-
+	if err != nil {
+		setup.Logger("common").Err(err).Interface("stack", string(debug.Stack())).Send()
+	}
 	//从redis中查询作者视频信息
 	tokenKey := utils.PersonalVideosKey + userIdStr
 	val, err := setup.Rdb.LRange(setup.Rctx, tokenKey, 0, -1).Result()
@@ -108,7 +110,7 @@ func (p PublishServiceImpl) List(myId int64, userIdStr string) (dto.PublishListR
 		for _, tmp := range val {
 			//获取videoDTO
 			if err := json.Unmarshal([]byte(tmp), &videoDTO); err != nil {
-				log.Err(err)
+				setup.Logger("common").Err(err).Interface("stack", string(debug.Stack())).Send()
 			}
 			assembleUser(&result, myId, videoDTO)
 		}
@@ -118,7 +120,7 @@ func (p PublishServiceImpl) List(myId int64, userIdStr string) (dto.PublishListR
 	}
 
 	//redis查询失败尝试mysql查询
-	log.Err(err)
+	setup.Logger("common").Err(err).Send()
 	videoDTOS := dao.GetVideosByAuthorId(authorId)
 	for _, tmp := range videoDTOS {
 		assembleUser(&result, myId, tmp)
@@ -153,7 +155,7 @@ func getVideoCommentAndFavouriteCountInfo(video *dto.Video, myId int64) {
 	pipeline.SIsMember(setup.Rctx, favoriteKey, myId)
 	exec, err := pipeline.Exec(setup.Rctx)
 	if err != nil {
-		log.Err(err)
+		setup.Logger("common").Err(err).Send()
 		//todo 从数据库中获取点赞数
 	}
 	//获得结果

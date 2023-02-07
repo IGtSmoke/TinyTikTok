@@ -11,14 +11,14 @@ import (
 )
 
 func main() {
-	ginServer := gin.Default()
-
-	// 使用RefreshTokenInterceptor()中间件身份验证
-	ginServer.Use(utils.RefreshTokenInterceptor())
-	routers.InitRouter(ginServer)
+	ginServer := gin.New()
 
 	// 依赖加载
 	initDeps()
+
+	// 使用RefreshTokenInterceptor()中间件身份验证
+	ginServer.Use(utils.SlowLog(), utils.RefreshTokenInterceptor(), gin.Recovery())
+	routers.InitRouter(ginServer)
 
 	if err := ginServer.Run(":" + conf.Conf.GinPort); err != nil {
 		panic("无法启动项目:ginServer.Run失败")
@@ -28,8 +28,9 @@ func main() {
 // 依赖加载
 func initDeps() {
 	if err := conf.LoadConfig(); err != nil {
-		log.Err(err)
+		log.Err(err).Send()
 	}
+	setup.Zerolog("slow", "common")
 	// 初始化redis连接
 	setup.Redis()
 	setup.Gorm()
