@@ -9,7 +9,7 @@ import (
 	"strconv"
 )
 
-var usi = impl.UserServiceImpl{}
+var userServiceImpl = impl.UserServiceImpl{}
 
 // Login 用户登录
 func Login(c *gin.Context) {
@@ -19,7 +19,7 @@ func Login(c *gin.Context) {
 		utils.Fail(c, err)
 		return
 	}
-	response, err := usi.Login(username, password)
+	response, err := userServiceImpl.Login(username, password)
 	if err != nil {
 		utils.Fail(c, err)
 		return
@@ -36,7 +36,7 @@ func Register(c *gin.Context) {
 		utils.Fail(c, err)
 		return
 	}
-	response, err := usi.Register(username, password)
+	response, err := userServiceImpl.Register(username, password)
 	if err != nil {
 		utils.Fail(c, err)
 		return
@@ -58,7 +58,7 @@ func UserInfo(c *gin.Context) {
 		utils.Fail(c, err)
 		return
 	}
-	response, err := usi.UserInfo(myId, userId)
+	response, err := userServiceImpl.UserInfo(myId, userId)
 	if err != nil {
 		utils.Fail(c, err)
 		return

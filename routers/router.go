@@ -22,7 +22,7 @@ func InitRouter(ginServer *gin.Engine) {
 	apiRouter.GET("/publish/list/", controller.List)
 	apiRouter.GET("/user/", controller.UserInfo)
 	// 互动接口
-	apiRouter.POST("/favorite/action/")
+	apiRouter.POST("/favorite/action/", controller.Thumb)
 	apiRouter.GET("/favorite/list/")
 	apiRouter.POST("/comment/action/")
 	apiRouter.GET("/comment/list/")

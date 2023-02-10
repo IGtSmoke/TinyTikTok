@@ -1,13 +1,15 @@
 package service
 
-import "github.com/gin-gonic/gin"
+import (
+	"TinyTikTok/model/dto"
+)
 
 // UserService 用户接口
 type UserService interface {
 	// Login 用户登录
-	Login(c *gin.Context)
+	Login(string, string) (dto.UserLoginResponse, error)
 	// Register 用户注册
-	Register(c *gin.Context)
-	// User 用户信息
-	User(c *gin.Context)
+	Register(string, string) (dto.UserLoginResponse, error)
+	// UserInfo 用户信息
+	UserInfo(int64, int64) (dto.UserInfoResponse, error)
 }

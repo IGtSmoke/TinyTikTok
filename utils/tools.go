@@ -9,7 +9,6 @@ import (
 // Base64Encode 加密 []byte -> string
 func Base64Encode(src []byte) string {
 	result := base64.StdEncoding.EncodeToString(src)
-
 	return result
 }
 

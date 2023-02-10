@@ -2,18 +2,14 @@
 package controller
 
 import (
-	"TinyTikTok/conf/setup"
 	"TinyTikTok/service/impl"
 	"TinyTikTok/utils"
 	"errors"
 	"github.com/gin-gonic/gin"
 	"mime/multipart"
-	"runtime/debug"
-	"strconv"
-	"time"
 )
 
-var psi = impl.PublishServiceImpl{}
+var publishServiceImpl = impl.PublishServiceImpl{}
 
 // Action 上传视频
 func Action(c *gin.Context) {
@@ -34,7 +30,7 @@ func Action(c *gin.Context) {
 		return
 	}
 
-	response, err := psi.Action(userId, title, data)
+	response, err := publishServiceImpl.Action(userId, title, data)
 	if err != nil {
 		utils.Fail(c, err)
 		return
@@ -53,24 +49,7 @@ func List(c *gin.Context) {
 	}
 
 	userIdStr := c.Query("user_id")
-	response, err := psi.List(myId, userIdStr)
-	if err != nil {
-		utils.Fail(c, err)
-		return
-	} else {
-		utils.Success(c, response)
-		return
-	}
-}
-
-func Feed(c *gin.Context) {
-	lastTime, err := getLastTime(c)
-	if err != nil {
-		setup.Logger("common").Err(err).Send()
-		lastTime = time.Now()
-	}
-	myId, _ := utils.GetUserIdByMiddleware(c)
-	response, err := psi.Feed(lastTime, myId)
+	response, err := publishServiceImpl.List(myId, userIdStr)
 	if err != nil {
 		utils.Fail(c, err)
 		return
@@ -94,19 +73,4 @@ func getFile(c *gin.Context) (*multipart.FileHeader, error) {
 		return nil, err
 	}
 	return data, nil
-}
-
-func getLastTime(c *gin.Context) (lastTime time.Time, err error) {
-	value := c.Query("latest_time")
-	if value == "" {
-		lastTime = time.Now()
-		return
-	}
-	inputTime, err := strconv.ParseInt(value, 10, 64)
-	if err != nil {
-		setup.Logger("common").Err(err).Interface("stack", string(debug.Stack())).Send()
-		return
-	}
-	lastTime = time.Unix(inputTime, 0)
-	return
 }

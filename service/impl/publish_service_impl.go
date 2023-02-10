@@ -15,7 +15,6 @@ import (
 	"runtime/debug"
 	"strconv"
 	"strings"
-	"time"
 )
 
 type PublishServiceImpl struct {
@@ -156,7 +155,6 @@ func getVideoCommentAndFavouriteCountInfo(video *dto.Video, myId int64) {
 	exec, err := pipeline.Exec(setup.Rctx)
 	if err != nil {
 		setup.Logger("common").Err(err).Send()
-		//todo 从数据库中获取点赞数
 	}
 	//获得结果
 	commentCount := exec[0].(*redis.IntCmd).Val()
@@ -166,22 +164,6 @@ func getVideoCommentAndFavouriteCountInfo(video *dto.Video, myId int64) {
 	video.CommentCount = commentCount
 	video.FavoriteCount = favoriteCount
 	video.IsFavorite = isFavorite
-}
-
-func (p PublishServiceImpl) Feed(lastTime time.Time, myId int64) (dto.PublishFeedResponse, error) {
-
-	result := make([]dto.Video, 0, 30)
-	videoDTOS, timestamp := dao.GetVideosAndNextTimeByLastTime(lastTime)
-	for _, videoDTO := range videoDTOS {
-		assembleUser(&result, myId, videoDTO)
-	}
-	nextTime := timestamp.Unix()
-	response := dto.PublishFeedResponse{
-		NextTime:  &nextTime,
-		VideoList: result,
-	}
-	utils.InitSuccessResult(&response.Result)
-	return response, nil
 }
 
 func openFile(file *multipart.FileHeader) (multipart.File, error) {
