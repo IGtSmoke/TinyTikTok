@@ -156,7 +156,6 @@ func getVideoCommentAndFavouriteCountInfo(video *dto.Video, myId int64) {
 	exec, err := pipeline.Exec(setup.Rctx)
 	if err != nil {
 		setup.Logger("common").Err(err).Send()
-		//todo 从数据库中获取点赞数
 	}
 	//获得结果
 	commentCount := exec[0].(*redis.IntCmd).Val()
