@@ -1,31 +1,18 @@
 package utils
 
 import (
-	"fmt"
+	"github.com/duke-git/lancet/v2/validator"
 	"regexp"
-	"strings"
 )
 
 // 校验是否不符合正则格式
 func mismatch(str string, regex string) bool {
-	str = strings.NewReplacer("\n", "", "\r", "", " ", "", "\t", "").Replace(str)
-	if str == "" {
+	if validator.IsEmptyString(str) {
 		return true
 	}
-	fmt.Print(str)
 	matched, _ := regexp.MatchString(regex, str)
 
 	return !matched
-}
-
-// PhoneInvalid 是否是无效手机格式
-func PhoneInvalid(phone string) bool {
-	return mismatch(phone, PhoneRegex)
-}
-
-// EmailInvalid 是否是无效邮箱格式
-func EmailInvalid(email string) bool {
-	return mismatch(email, EmailRegex)
 }
 
 // PasswordInvalid 是否是无效密码格式

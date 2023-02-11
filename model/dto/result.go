@@ -26,6 +26,12 @@ type PublishListResponse struct {
 	VideoList []Video `json:"video_list"` // 用户发布的视频列表
 }
 
+type PublishFeedResponse struct {
+	NextTime *int64 `json:"next_time"` // 本次返回的视频中，发布最早的时间，作为下次请求时的latest_time
+	Result
+	VideoList []Video `json:"video_list"` // 视频列表
+}
+
 // User 组装响应体user信息
 type User struct {
 	FollowCount   int64  `json:"follow_count"`   // 关注总数
@@ -41,5 +47,5 @@ type Video struct {
 	CommentCount  int64 `json:"comment_count"`  // 视频的评论总数
 	FavoriteCount int64 `json:"favorite_count"` // 视频的点赞总数
 	IsFavorite    bool  `json:"is_favorite"`    // true-已点赞，false-未点赞
-	VideoDTO      VideoDTO
+	VideoDTO
 }

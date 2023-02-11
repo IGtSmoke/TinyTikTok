@@ -17,6 +17,6 @@ func Gorm() {
 
 	Mdb, err = gorm.Open(mysql.Open(conf.Conf.DSN), &gorm.Config{})
 	if err != nil {
-		log.Err(err)
+		log.Err(err).Send()
 	}
 }
