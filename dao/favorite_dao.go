@@ -17,14 +17,16 @@ func (l LikePO) TableName() string {
 
 func QueryLikeByVideoIdAndMyId(myId int64, videoId int64) dto.LikeDTO {
 	likeDTO := dto.LikeDTO{}
-	setup.Mdb.Model(LikePO{}).Where("user_id = ?", myId, "video_id = ?", videoId).First(&likeDTO)
+	setup.Mdb.Model(LikePO{}).Where("user_id = ? AND video_id = ?", myId, videoId).First(&likeDTO)
 	return likeDTO
 }
 
 func UpdateLike(likeDTO dto.LikeDTO) {
-	setup.Mdb.Model(LikePO{}).Updates(&likeDTO)
+	setup.Mdb.Model(LikePO{}).Where("user_id = ? AND video_id = ?", likeDTO.UserId, likeDTO.VideoId).Update("cancel", likeDTO.IsThumb)
 }
 
 func CreateLike(likeDTO dto.LikeDTO) {
-	setup.Mdb.Model(LikePO{}).Create(&likeDTO)
+	setup.Mdb.Create(&LikePO{
+		LikeDTO: likeDTO,
+	})
 }
