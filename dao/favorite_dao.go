@@ -22,7 +22,7 @@ func QueryLikeByVideoIdAndMyId(myId int64, videoId int64) dto.LikeDTO {
 }
 
 func UpdateLike(likeDTO dto.LikeDTO) {
-	setup.Mdb.Model(LikePO{}).Where("user_id = ? AND video_id = ?", likeDTO.UserId, likeDTO.VideoId).Update("cancel", likeDTO.IsThumb)
+	setup.Mdb.Model(LikePO{}).Where("user_id = ? AND video_id = ?", likeDTO.UserId, likeDTO.VideoId).Update("status", likeDTO.IsThumb)
 }
 
 func CreateLike(likeDTO dto.LikeDTO) {
