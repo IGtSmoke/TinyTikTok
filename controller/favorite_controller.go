@@ -38,11 +38,11 @@ func getVideoId(c *gin.Context) (int64, error) {
 	return videoId, err
 }
 
-func getIsThumb(c *gin.Context) (bool, error) {
+func getIsThumb(c *gin.Context) (int8, error) {
 	value := c.Query("action_type")
 	if value == "1" {
-		return true, nil
+		return 1, nil
 	} else {
-		return false, nil
+		return 0, nil
 	}
 }

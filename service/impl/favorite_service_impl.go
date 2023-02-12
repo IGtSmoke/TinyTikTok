@@ -11,7 +11,7 @@ import (
 type FavoriteServiceImpl struct {
 }
 
-func (i FavoriteServiceImpl) Thumb(myId int64, videoId int64, isThumb bool) (dto.Result, error) {
+func (i FavoriteServiceImpl) Thumb(myId int64, videoId int64, isThumb int8) (dto.Result, error) {
 	likeDTO := dao.QueryLikeByVideoIdAndMyId(myId, videoId)
 	if (likeDTO == dto.LikeDTO{}) {
 		dao.CreateLike(dto.LikeDTO{
@@ -27,7 +27,7 @@ func (i FavoriteServiceImpl) Thumb(myId int64, videoId int64, isThumb bool) (dto
 		})
 	}
 	favoriteKey := utils.VideoLikeKey + strconv.FormatInt(videoId, 10)
-	if isThumb {
+	if isThumb == 1 {
 		setup.Rdb.SAdd(setup.Rctx, favoriteKey, myId)
 	} else {
 		setup.Rdb.SRem(setup.Rctx, favoriteKey, myId)
