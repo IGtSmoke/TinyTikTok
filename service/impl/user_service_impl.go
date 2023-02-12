@@ -6,11 +6,11 @@ import (
 	"TinyTikTok/model/dto"
 	"TinyTikTok/service"
 	"TinyTikTok/utils"
-	"github.com/gin-gonic/gin"
+	"errors"
+	"strconv"
+
 	"github.com/go-redis/redis/v9"
 	"github.com/google/uuid"
-	"github.com/rs/zerolog/log"
-	"strconv"
 )
 
 type UserServiceImpl struct {
@@ -18,24 +18,15 @@ type UserServiceImpl struct {
 }
 
 // Login 用户登录
-func (usi *UserServiceImpl) Login(c *gin.Context) {
-	username := c.Query("username")
-	password := c.Query("password")
-
-	if utils.PasswordInvalid(password) {
-		utils.Fail(c, "密码无效")
-		return
-	}
-
+func (usi *UserServiceImpl) Login(username string, password string) (dto.UserLoginResponse, error) {
+	response := dto.UserLoginResponse{}
 	user := dao.SearchUserByUserName(username)
-	if (user == dto.UserDTO{}) {
-		utils.Fail(c, "当前用户不存在")
-		return
+	if user == (dto.UserDTO{}) {
+		return response, errors.New("用户不存在")
 	}
 
 	if user.Password != password {
-		utils.Fail(c, "账号和密码不匹配")
-		return
+		return response, errors.New("密码错误")
 	}
 	//登录成功
 	//生成token
@@ -47,30 +38,22 @@ func (usi *UserServiceImpl) Login(c *gin.Context) {
 		rdb.Expire(setup.Rctx, tokenKey, utils.LoginUserTTL)
 		return nil
 	}); err != nil {
-		log.Err(err)
+		setup.Logger("common").Err(err).Send()
 	}
 	//返回token和用户id
-	response := dto.UserLoginResponse{}
+
 	utils.InitSuccessResult(&response.Result)
 	response.Token = token
 	response.UserID = user.UserID
-	utils.Success(c, response)
+	return response, nil
 }
 
 // Register 用户注册
-func (usi *UserServiceImpl) Register(c *gin.Context) {
-	//接收邮箱和密码
-	username := c.Query("username")
-	password := c.Query("password")
-	//根据username查询用户是否存在
-	if utils.PasswordInvalid(password) {
-		utils.Fail(c, "密码无效")
-		return
-	}
+func (usi *UserServiceImpl) Register(username string, password string) (dto.UserLoginResponse, error) {
+	response := dto.UserLoginResponse{}
 	user := dao.SearchUserByUserName(username)
-	if (user != dto.UserDTO{}) {
-		utils.Fail(c, "用户已存在")
-		return
+	if user != (dto.UserDTO{}) {
+		return response, errors.New("用户已存在")
 	}
 
 	//保存用户信息到数据库
@@ -80,9 +63,7 @@ func (usi *UserServiceImpl) Register(c *gin.Context) {
 	user.Password = password
 	success := dao.SaveUser(&user)
 	if !success {
-		log.Error().Msg("创建用户失败")
-		utils.Fail(c, "创建用户失败")
-		return
+		return response, errors.New("保存用户失败")
 	}
 
 	//保存用户信息到redis
@@ -95,43 +76,25 @@ func (usi *UserServiceImpl) Register(c *gin.Context) {
 		rdb.Expire(setup.Rctx, tokenKey, utils.LoginUserTTL)
 		return nil
 	}); err != nil {
-		log.Err(err)
+		setup.Logger("common").Err(err).Send()
 	}
 
 	//返回token和用户id
-	response := dto.UserLoginResponse{}
 	utils.InitSuccessResult(&response.Result)
 	response.Token = token
 	response.UserID = userId
-	utils.Success(c, response)
-	return
+	return response, nil
 }
 
 // UserInfo 查询用户信息
-func (usi *UserServiceImpl) UserInfo(c *gin.Context) {
+func (usi *UserServiceImpl) UserInfo(myId int64, userId int64) (dto.UserInfoResponse, error) {
 	//获取查询用户的用户信息
-	value := c.Query("user_id")
-	userId, err := strconv.ParseInt(value, 10, 64)
-	if err != nil {
-		log.Err(err)
-	}
-	myuserId, exists := c.Get("userId")
-	if exists == false {
-		log.Error().Msg("[UserInfo]无法得到userId")
-		utils.Fail(c, "bad param")
-		return
-	}
-	myId := myuserId.(string)
-	parseInt, err := strconv.ParseInt(myId, 10, 64)
-	if err != nil {
-		log.Err(err)
-	}
-	userInfo := GetUserInfo(parseInt, userId)
+	userInfo := GetUserInfo(myId, userId)
 	response := dto.UserInfoResponse{
 		User: userInfo,
 	}
 	utils.InitSuccessResult(&response.Result)
-	utils.Success(c, response)
+	return response, nil
 }
 
 // GetUserInfo 查询对方用户信息及自己是否关注对方
@@ -149,7 +112,7 @@ func GetUserInfo(myId int64, userId int64) dto.User {
 	pipeline.SIsMember(setup.Rctx, fansKey, myId)
 	exec, err := pipeline.Exec(setup.Rctx)
 	if err != nil {
-		log.Err(err)
+		setup.Logger("common").Err(err).Send()
 	}
 	//获得结果
 	fansCount := exec[0].(*redis.IntCmd).Val()
