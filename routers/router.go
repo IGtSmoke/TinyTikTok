@@ -30,8 +30,9 @@ func InitRouter(ginServer *gin.Engine) {
 	apiRouter.GET("/comment/list/")
 	// 社交接口
 	apiRouter.POST("/relation/action/", controller.Follow)
-	apiRouter.GET("/relation/follow/list/")
-	apiRouter.GET("/relation/follower/list")
+	apiRouter.GET("/relation/follow/list/", controller.FollowList)
+	apiRouter.GET("/relation/follower/list", controller.FollowerList)
+	apiRouter.GET("/relation/friend/list", controller.FriendList)
 
 	// 404
 	ginServer.NoRoute(func(c *gin.Context) {

@@ -49,3 +49,9 @@ type Video struct {
 	IsFavorite    bool  `json:"is_favorite"`    // true-已点赞，false-未点赞
 	VideoDTO
 }
+
+// Relation 组装响应体List信息
+type RelationList struct {
+	Result
+	UserList []User `json:"user_list"`
+}

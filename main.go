@@ -20,7 +20,6 @@ func main() {
 	// 使用RefreshTokenInterceptor()中间件身份验证
 	ginServer.Use(utils.SlowLog(), utils.RefreshTokenInterceptor(), gin.Recovery())
 	routers.InitRouter(ginServer)
-
 	if err := ginServer.Run(":" + conf.Conf.GinPort); err != nil {
 		panic("无法启动项目:ginServer.Run失败")
 	}

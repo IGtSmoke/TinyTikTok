@@ -8,6 +8,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+var fsi_ = impl.FollowServiceImpl{}
 var rsi = impl.RelationServiceImpl{}
 
 // 关注操作
@@ -44,7 +45,7 @@ func Follow(c *gin.Context) {
 		return
 	}
 	if action_type == 1 {
-		response, err := rsi.FollowUser(myId, user_id)
+		response, err := fsi_.FollowUser(myId, user_id)
 		if err != nil {
 			utils.Fail(c, err)
 			return
@@ -53,7 +54,7 @@ func Follow(c *gin.Context) {
 			return
 		}
 	} else {
-		response, err := rsi.UnFollowUser(myId, user_id)
+		response, err := fsi_.UnFollowUser(myId, user_id)
 		if err != nil {
 			utils.Fail(c, err)
 			return
@@ -66,14 +67,71 @@ func Follow(c *gin.Context) {
 
 // 关注列表
 func FollowList(c *gin.Context) {
-
+	value := c.Query("user_id")
+	userId, err := strconv.ParseInt(value, 10, 64)
+	if err != nil {
+		utils.Fail(c, err)
+		return
+	}
+	myId, err := utils.GetUserIdByMiddleware(c)
+	if err != nil {
+		utils.Fail(c, err)
+		return
+	}
+	response, err := rsi.ShowFollowList(myId, userId)
+	if err != nil {
+		utils.Fail(c, err)
+		return
+	} else {
+		utils.Success(c, response)
+		return
+	}
 }
 
 // 粉丝列表
 func FollowerList(c *gin.Context) {
-
+	value := c.Query("user_id")
+	userId, err := strconv.ParseInt(value, 10, 64)
+	if err != nil {
+		utils.Fail(c, err)
+		return
+	}
+	myId, err := utils.GetUserIdByMiddleware(c)
+	if err != nil {
+		utils.Fail(c, err)
+		return
+	}
+	response, err := rsi.ShowFollowerList(myId, userId)
+	if err != nil {
+		utils.Fail(c, err)
+		return
+	} else {
+		utils.Success(c, response)
+		return
+	}
 }
 
+func FriendList(c *gin.Context) {
+	value := c.Query("user_id")
+	userId, err := strconv.ParseInt(value, 10, 64)
+	if err != nil {
+		utils.Fail(c, err)
+		return
+	}
+	myId, err := utils.GetUserIdByMiddleware(c)
+	if err != nil {
+		utils.Fail(c, err)
+		return
+	}
+	response, err := rsi.ShowFriendList(myId, userId)
+	if err != nil {
+		utils.Fail(c, err)
+		return
+	} else {
+		utils.Success(c, response)
+		return
+	}
+}
 func getIsFollow(c *gin.Context) (int8, error) {
 	value := c.Query("action_type")
 	if value == "1" {
