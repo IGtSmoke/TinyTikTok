@@ -32,6 +32,21 @@ type PublishFeedResponse struct {
 	VideoList []Video `json:"video_list"` // 视频列表
 }
 
+type FavoriteListResponse struct {
+	Result
+	VideoList []Video `json:"video_list"` // 视频列表
+}
+
+type CommentActionResponse struct {
+	Result
+	Comment Comment `json:"comment"` // 评论信息
+}
+
+type CommentListResponse struct {
+	Result
+	CommentList []Comment `json:"comment_list"` // 评论列表
+}
+
 // User 组装响应体user信息
 type User struct {
 	FollowCount   int64  `json:"follow_count"`   // 关注总数
@@ -48,6 +63,11 @@ type Video struct {
 	FavoriteCount int64 `json:"favorite_count"` // 视频的点赞总数
 	IsFavorite    bool  `json:"is_favorite"`    // true-已点赞，false-未点赞
 	VideoDTO
+}
+
+type Comment struct {
+	CommentDTO
+	User `json:"user"`
 }
 
 // RelationList 组装响应体List信息

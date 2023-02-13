@@ -111,7 +111,7 @@ func (p PublishServiceImpl) List(myId int64, userIdStr string) (dto.PublishListR
 			if err := json.Unmarshal([]byte(tmp), &videoDTO); err != nil {
 				setup.Logger("common").Err(err).Interface("stack", string(debug.Stack())).Send()
 			}
-			assembleUser(&result, myId, videoDTO)
+			assembleVideoAndUser(&result, myId, videoDTO)
 		}
 		response.VideoList = result
 		utils.InitSuccessResult(&response.Result)
@@ -122,14 +122,14 @@ func (p PublishServiceImpl) List(myId int64, userIdStr string) (dto.PublishListR
 	setup.Logger("common").Err(err).Send()
 	videoDTOS := dao.GetVideosByAuthorId(authorId)
 	for _, tmp := range videoDTOS {
-		assembleUser(&result, myId, tmp)
+		assembleVideoAndUser(&result, myId, tmp)
 	}
 	response.VideoList = result
 	utils.InitSuccessResult(&response.Result)
 	return response, nil
 }
 
-func assembleUser(result *[]dto.Video, myId int64, videoDTO dto.VideoDTO) {
+func assembleVideoAndUser(result *[]dto.Video, myId int64, videoDTO dto.VideoDTO) {
 	user := GetUserInfo(myId, videoDTO.AuthorID)
 	//组装
 	video := dto.Video{
@@ -149,7 +149,7 @@ func getVideoCommentAndFavouriteCountInfo(video *dto.Video, myId int64) {
 	favoriteKey := utils.VideoLikeKey + strconv.FormatInt(int64(videoId), 10)
 	//构建管道
 	pipeline := setup.Rdb.Pipeline()
-	pipeline.SCard(setup.Rctx, commentKey)
+	pipeline.LLen(setup.Rctx, commentKey)
 	pipeline.SCard(setup.Rctx, favoriteKey)
 	pipeline.SIsMember(setup.Rctx, favoriteKey, myId)
 	exec, err := pipeline.Exec(setup.Rctx)

@@ -41,8 +41,8 @@ func Action(c *gin.Context) {
 	}
 }
 
-// List 视频列表
-func List(c *gin.Context) {
+// PublishList 视频列表
+func PublishList(c *gin.Context) {
 	myId, err := utils.GetUserIdByMiddleware(c)
 	if err != nil {
 		utils.Fail(c, err)
