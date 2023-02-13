@@ -19,7 +19,9 @@ func Login(c *gin.Context) {
 		utils.Fail(c, err)
 		return
 	}
+
 	response, err := userServiceImpl.Login(username, password)
+
 	if err != nil {
 		utils.Fail(c, err)
 		return
@@ -36,7 +38,9 @@ func Register(c *gin.Context) {
 		utils.Fail(c, err)
 		return
 	}
+
 	response, err := userServiceImpl.Register(username, password)
+
 	if err != nil {
 		utils.Fail(c, err)
 		return
@@ -58,7 +62,9 @@ func UserInfo(c *gin.Context) {
 		utils.Fail(c, err)
 		return
 	}
+
 	response, err := userServiceImpl.UserInfo(myId, userId)
+
 	if err != nil {
 		utils.Fail(c, err)
 		return

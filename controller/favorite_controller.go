@@ -3,6 +3,7 @@ package controller
 import (
 	"TinyTikTok/service/impl"
 	"TinyTikTok/utils"
+
 	"github.com/gin-gonic/gin"
 	"strconv"
 )
@@ -17,12 +18,19 @@ func Thumb(c *gin.Context) {
 		return
 	}
 	isThumb, err := getIsThumb(c)
+	if err != nil {
+		utils.Fail(c, err)
+		return
+	}
+
 	myId, err := utils.GetUserIdByMiddleware(c)
 	if err != nil {
 		utils.Fail(c, err)
 		return
 	}
+
 	response, err := favoriteServiceImpl.Thumb(myId, videoId, isThumb)
+
 	if err != nil {
 		utils.Fail(c, err)
 		return

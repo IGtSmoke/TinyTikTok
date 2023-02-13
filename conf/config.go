@@ -2,10 +2,11 @@
 package conf
 
 import (
-	"github.com/rs/zerolog/log"
-	"gopkg.in/yaml.v3"
 	"os"
 	"runtime"
+
+	"github.com/rs/zerolog/log"
+	"gopkg.in/yaml.v3"
 )
 
 // Config Global configuration variables

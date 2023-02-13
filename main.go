@@ -6,6 +6,7 @@ import (
 	"TinyTikTok/conf/setup"
 	"TinyTikTok/routers"
 	"TinyTikTok/utils"
+
 	"github.com/gin-gonic/gin"
 	"github.com/rs/zerolog/log"
 )

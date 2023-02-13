@@ -21,7 +21,7 @@ func UploadFile(bucketName string, objectName string, reader io.Reader, objectsi
 	return nil
 }
 
-// GetFileUrl 从 minio 获取文件Url
+// GetFileUrl 从 minio 获取文件Urlh
 func GetFileUrl(bucketName string, fileName string, expires time.Duration) (*url.URL, error) {
 	reqParams := make(url.Values)
 	if expires <= 0 {

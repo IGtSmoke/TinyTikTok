@@ -30,6 +30,7 @@ func Action(c *gin.Context) {
 		return
 	}
 
+
 	response, err := publishServiceImpl.Action(userId, title, data)
 	if err != nil {
 		utils.Fail(c, err)
@@ -49,7 +50,9 @@ func List(c *gin.Context) {
 	}
 
 	userIdStr := c.Query("user_id")
+
 	response, err := publishServiceImpl.List(myId, userIdStr)
+
 	if err != nil {
 		utils.Fail(c, err)
 		return
@@ -66,6 +69,7 @@ func getTitle(c *gin.Context) (string, error) {
 	}
 	return title, nil
 }
+
 
 func getFile(c *gin.Context) (*multipart.FileHeader, error) {
 	data, err := c.FormFile("data")
