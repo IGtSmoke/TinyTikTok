@@ -2,11 +2,10 @@ package utils
 
 import (
 	"TinyTikTok/conf/setup"
+	"github.com/minio/minio-go/v7"
 	"io"
 	"net/url"
 	"time"
-
-	"github.com/minio/minio-go/v7"
 )
 
 // UploadFile 上传文件（提供reader）至 minio

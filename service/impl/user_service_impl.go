@@ -7,10 +7,9 @@ import (
 	"TinyTikTok/service"
 	"TinyTikTok/utils"
 	"errors"
-	"strconv"
-
 	"github.com/go-redis/redis/v9"
 	"github.com/google/uuid"
+	"strconv"
 )
 
 type UserServiceImpl struct {

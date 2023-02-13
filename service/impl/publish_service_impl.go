@@ -167,22 +167,6 @@ func getVideoCommentAndFavouriteCountInfo(video *dto.Video, myId int64) {
 	video.IsFavorite = isFavorite
 }
 
-func (p PublishServiceImpl) Feed(lastTime time.Time, myId int64) (dto.PublishFeedResponse, error) {
-
-	result := make([]dto.Video, 0, 30)
-	videoDTOS, timestamp := dao.GetVideosAndNextTimeByLastTime(lastTime)
-	for _, videoDTO := range videoDTOS {
-		assembleUser(&result, myId, videoDTO)
-	}
-	nextTime := timestamp.Unix()
-	response := dto.PublishFeedResponse{
-		NextTime:  &nextTime,
-		VideoList: result,
-	}
-	utils.InitSuccessResult(&response.Result)
-	return response, nil
-}
-
 func openFile(file *multipart.FileHeader) (multipart.File, error) {
 	f, err := file.Open()
 	if err != nil {

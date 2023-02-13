@@ -1,9 +1,12 @@
 package service
 
-import "github.com/gin-gonic/gin"
+import (
+	"TinyTikTok/model/dto"
+	"time"
+)
 
-// FeedService 视频流接口
 type FeedService interface {
+
 	// Feed 视频流
-	Feed(c *gin.Context)
+	Feed(time.Time, int64) (dto.PublishFeedResponse, error)
 }
