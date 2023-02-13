@@ -2,7 +2,6 @@
 package controller
 
 import (
-	"TinyTikTok/conf/setup"
 	"TinyTikTok/service/impl"
 	"TinyTikTok/utils"
 	"errors"
