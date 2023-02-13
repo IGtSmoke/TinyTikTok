@@ -50,8 +50,8 @@ type Video struct {
 	VideoDTO
 }
 
-// Relation 组装响应体List信息
+// RelationList 组装响应体List信息
 type RelationList struct {
-    Result
-    UserList []User `json:"user_list"`
+	Result
+	UserList []User `json:"user_list"`
 }
