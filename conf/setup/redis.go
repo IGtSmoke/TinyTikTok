@@ -1,10 +1,8 @@
 package setup
 
 import (
-	"context"
-
 	"TinyTikTok/conf"
-
+	"context"
 	"github.com/go-redis/redis/v9"
 )
 
