@@ -9,6 +9,7 @@ import (
 	"errors"
 	"github.com/go-redis/redis/v9"
 	"github.com/google/uuid"
+	"golang.org/x/crypto/bcrypt"
 	"strconv"
 )
 
@@ -24,7 +25,8 @@ func (usi *UserServiceImpl) Login(username string, password string) (dto.UserLog
 		return response, errors.New("用户不存在")
 	}
 
-	if user.Password != password {
+	err := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(password))
+	if err != nil {
 		return response, errors.New("密码错误")
 	}
 	//登录成功
@@ -37,7 +39,7 @@ func (usi *UserServiceImpl) Login(username string, password string) (dto.UserLog
 		rdb.Expire(setup.Rctx, tokenKey, utils.LoginUserTTL)
 		return nil
 	}); err != nil {
-		setup.Logger("common").Err(err).Send()
+		setup.Logger("common").Err(err).Msg("Login_redis")
 	}
 	//返回token和用户id
 

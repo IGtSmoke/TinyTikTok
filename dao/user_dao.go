@@ -3,7 +3,7 @@ package dao
 import (
 	"TinyTikTok/conf/setup"
 	"TinyTikTok/model/dto"
-	"TinyTikTok/utils"
+	"golang.org/x/crypto/bcrypt"
 	"gorm.io/gorm"
 )
 
@@ -24,12 +24,6 @@ func SearchUserByUserName(username string) dto.UserDTO {
 	if err != nil {
 		setup.Logger("common").Err(err).Send()
 	}
-	//将查询到的密码解密
-	password, err := utils.Base64Decode(user.Password)
-	if err != nil {
-		setup.Logger("common").Err(err).Send()
-	}
-	user.Password = string(password)
 	//返回数据
 	return user
 }
@@ -37,9 +31,13 @@ func SearchUserByUserName(username string) dto.UserDTO {
 // SaveUser 插入一条user 返回值表示是否插入成功
 func SaveUser(userDTO *dto.UserDTO) bool {
 	//加密
-	userDTO.Password = utils.Base64Encode([]byte(userDTO.Password))
+	password, err := bcrypt.GenerateFromPassword([]byte(userDTO.Password), bcrypt.MinCost)
+	if err != nil {
+		setup.Logger("common").Err(err).Send()
+	}
+	userDTO.Password = string(password)
 	//插入对象
-	err := setup.Mdb.Create(&UserPO{
+	err = setup.Mdb.Create(&UserPO{
 		UserDTO: *userDTO,
 	}).Error
 	if err != nil {
@@ -56,10 +54,5 @@ func SearchUserByUserId(userId int64) dto.UserDTO {
 	if err != nil {
 		setup.Logger("common").Err(err).Send()
 	}
-	password, err := utils.Base64Decode(userDTO.Password)
-	if err != nil {
-		setup.Logger("common").Err(err).Send()
-	}
-	userDTO.Password = string(password)
 	return userDTO
 }
