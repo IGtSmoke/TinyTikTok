@@ -20,13 +20,13 @@ func InitRouter(ginServer *gin.Engine) {
 	//以下api均需要鉴权
 	ginServer.Use(utils.LoginInterceptor())
 	apiRouter.POST("/publish/action/", controller.Action)
-	apiRouter.GET("/publish/list/", controller.List)
+	apiRouter.GET("/publish/list/", controller.PublishList)
 	apiRouter.GET("/user/", controller.UserInfo)
 	// 互动接口
 	apiRouter.POST("/favorite/action/", controller.Thumb)
-	apiRouter.GET("/favorite/list/")
-	apiRouter.POST("/comment/action/")
-	apiRouter.GET("/comment/list/")
+	apiRouter.GET("/favorite/list/", controller.FavoriteList)
+	apiRouter.POST("/comment/action/", controller.Comment)
+	apiRouter.GET("/comment/list/", controller.CommentList)
 	// 社交接口
 	apiRouter.POST("/relation/action/", controller.Follow)
 	apiRouter.GET("/relation/follow/list/", controller.FollowList)

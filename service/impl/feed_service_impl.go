@@ -15,7 +15,7 @@ func (f FeedServiceImpl) Feed(lastTime time.Time, myId int64) (dto.PublishFeedRe
 	result := make([]dto.Video, 0, 30)
 	videoDTOS, timestamp := dao.GetVideosAndNextTimeByLastTime(lastTime)
 	for _, videoDTO := range videoDTOS {
-		assembleUser(&result, myId, videoDTO)
+		assembleVideoAndUser(&result, myId, videoDTO)
 	}
 	nextTime := timestamp.Unix()
 	response := dto.PublishFeedResponse{

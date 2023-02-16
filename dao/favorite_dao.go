@@ -21,6 +21,12 @@ func QueryLikeByVideoIdAndMyId(myId int64, videoId int64) dto.LikeDTO {
 	return likeDTO
 }
 
+func QueryLikeByUserId(userId int64) []dto.LikeDTO {
+	var Result []dto.LikeDTO
+	setup.Mdb.Model(LikePO{}).Where("user_id = ? AND status = ?", userId, 1).Find(&Result)
+	return Result
+}
+
 func UpdateLike(likeDTO dto.LikeDTO) {
 	setup.Mdb.Model(LikePO{}).Where("user_id = ? AND video_id = ?", likeDTO.UserId, likeDTO.VideoId).Update("status", likeDTO.IsThumb)
 }

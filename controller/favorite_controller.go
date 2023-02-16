@@ -54,3 +54,16 @@ func getIsThumb(c *gin.Context) (int8, error) {
 		return 0, nil
 	}
 }
+
+func FavoriteList(c *gin.Context) {
+	myId, _ := utils.GetUserIdByMiddleware(c)
+	userIdStr := c.Query("user_id")
+	response, err := favoriteServiceImpl.List(myId, userIdStr)
+	if err != nil {
+		utils.Fail(c, err)
+		return
+	} else {
+		utils.Success(c, response)
+		return
+	}
+}
