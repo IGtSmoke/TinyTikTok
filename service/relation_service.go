@@ -1,13 +1,15 @@
 package service
 
-import "github.com/gin-gonic/gin"
+import (
+	"TinyTikTok/model/dto"
+)
 
 // RelationService 社交接口
 type RelationService interface {
-	// Follow 用户关注列表
-	FollowList(c *gin.Context)
-	// Follower 用户粉丝列表
-	FollowerList(c *gin.Context)
-	// Friend 用户好友列表
-	FriendList(c *gin.Context)
+	// ShowFollowList 用户关注列表
+	ShowFollowList(int64, int64) (dto.RelationList, error)
+	// ShowFollowerList 用户粉丝列表
+	ShowFollowerList(int64, int64) (dto.RelationList, error)
+	// ShowFriendList 用户好友列表
+	ShowFriendList(int64, int64) (dto.RelationList, error)
 }

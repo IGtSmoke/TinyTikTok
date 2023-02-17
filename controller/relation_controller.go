@@ -11,7 +11,7 @@ import (
 var fsi_ = impl.FollowServiceImpl{}
 var rsi = impl.RelationServiceImpl{}
 
-// 关注操作
+// Follow 关注操作
 func Follow(c *gin.Context) {
 	myId, err := utils.GetUserIdByMiddleware(c)
 	if err != nil {
@@ -33,19 +33,19 @@ func Follow(c *gin.Context) {
 	// }
 	//关注目标id
 	value := c.Query("to_user_id")
-	user_id, err := strconv.ParseInt(value, 10, 64)
+	userId, err := strconv.ParseInt(value, 10, 64)
 	if err != nil {
 		utils.Fail(c, err)
 		return
 	}
 	//1-关注，2-取消关注
-	action_type, err := getIsFollow(c)
+	actionType, err := getIsFollow(c)
 	if err != nil {
 		utils.Fail(c, err)
 		return
 	}
-	if action_type == 1 {
-		response, err := fsi_.FollowUser(myId, user_id)
+	if actionType == 1 {
+		response, err := fsi_.FollowUser(myId, userId)
 		if err != nil {
 			utils.Fail(c, err)
 			return
@@ -54,7 +54,7 @@ func Follow(c *gin.Context) {
 			return
 		}
 	} else {
-		response, err := fsi_.UnFollowUser(myId, user_id)
+		response, err := fsi_.UnFollowUser(myId, userId)
 		if err != nil {
 			utils.Fail(c, err)
 			return
@@ -65,7 +65,7 @@ func Follow(c *gin.Context) {
 	}
 }
 
-// 关注列表
+// FollowList 关注列表
 func FollowList(c *gin.Context) {
 	value := c.Query("user_id")
 	userId, err := strconv.ParseInt(value, 10, 64)
@@ -88,7 +88,7 @@ func FollowList(c *gin.Context) {
 	}
 }
 
-// 粉丝列表
+// FollowerList 粉丝列表
 func FollowerList(c *gin.Context) {
 	value := c.Query("user_id")
 	userId, err := strconv.ParseInt(value, 10, 64)
