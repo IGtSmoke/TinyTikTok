@@ -1,11 +1,13 @@
 package service
 
-import "github.com/gin-gonic/gin"
+import (
+	"TinyTikTok/model/dto"
+)
 
 // CommentService 评论接口
 type CommentService interface {
-	//Action 评论操作
-	Action(c *gin.Context)
+	//Comment 评论操作
+	Comment(int64, int64, string) (dto.CommentActionResponse, error)
 	//List 评论列表
-	List(c *gin.Context)
+	List(int64, int64) (dto.CommentListResponse, error)
 }

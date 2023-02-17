@@ -17,7 +17,7 @@ type RelationServiceImpl struct {
 	service.RelationService
 }
 
-// 关注用户
+// FollowUser 关注用户
 func (i FollowServiceImpl) FollowUser(myId int64, userId int64) (dto.Result, error) {
 	followDTO := dao.QueryFollowByMyIdAndUserId(myId, userId)
 	if (followDTO == dto.FollowDTO{}) {
@@ -37,19 +37,12 @@ func (i FollowServiceImpl) FollowUser(myId int64, userId int64) (dto.Result, err
 	followKey := utils.FollowUserKey + strconv.FormatInt(myId, 10)
 	setup.Rdb.SAdd(setup.Rctx, fansKey, myId)
 	setup.Rdb.SAdd(setup.Rctx, followKey, userId)
-	// if _, err := setup.Rdb.Pipelined(setup.Rctx, func(rdb redis.Pipeliner) error {
-	// 	rdb.SAdd(setup.Rctx, fansKey, myId)
-	// 	rdb.SAdd(setup.Rctx, followKey, userId)
-	// 	return nil
-	// }); err != nil {
-	// 	setup.Logger("common").Err(err).Send()
-	// }
 	response := dto.Result{}
 	utils.InitSuccessResult(&response)
 	return response, nil
 }
 
-// 取关用户
+// UnFollowUser 取关用户
 func (i FollowServiceImpl) UnFollowUser(myId int64, userId int64) (dto.Result, error) {
 	followDTO := dao.QueryFollowByMyIdAndUserId(myId, userId)
 	if (followDTO == dto.FollowDTO{}) {
@@ -69,22 +62,12 @@ func (i FollowServiceImpl) UnFollowUser(myId int64, userId int64) (dto.Result, e
 	followKey := utils.FollowUserKey + strconv.FormatInt(myId, 10)
 	setup.Rdb.SRem(setup.Rctx, fansKey, myId)
 	setup.Rdb.SRem(setup.Rctx, followKey, userId)
-	// if _, err := setup.Rdb.Pipelined(setup.Rctx, func(rdb redis.Pipeliner) error {
-	// 	rdb.SRem(setup.Rctx, fansKey, myId)
-	// 	rdb.SRem(setup.Rctx, followKey, userId)
-	// 	return nil
-	// }); err != nil {
-	// 	setup.Logger("common").Err(err).Send()
-	// }
 	response := dto.Result{}
 	utils.InitSuccessResult(&response)
 	return response, nil
 }
 
-// fansKey := utils.FansUserKey + strconv.FormatInt(myId, 10)
-// followKey := utils.FollowUserKey + strconv.FormatInt(userDTO.UserID, 10)
-
-// 查看目标关注列表
+// ShowFollowList 查看目标关注列表
 func (i RelationServiceImpl) ShowFollowList(myId int64, userId int64) (dto.RelationList, error) {
 	//从redis中根据UserId取关注用户Id数组
 	followKey := utils.FollowUserKey + strconv.FormatInt(userId, 10)
@@ -109,7 +92,7 @@ func (i RelationServiceImpl) ShowFollowList(myId int64, userId int64) (dto.Relat
 	return response, nil
 }
 
-// 查看目标粉丝列表
+// ShowFollowerList 查看目标粉丝列表
 func (i RelationServiceImpl) ShowFollowerList(myId int64, userId int64) (dto.RelationList, error) {
 	//从redis中根据UserId取粉丝用户Id数组
 	fanKey := utils.FansUserKey + strconv.FormatInt(userId, 10)
@@ -134,18 +117,18 @@ func (i RelationServiceImpl) ShowFollowerList(myId int64, userId int64) (dto.Rel
 	return response, nil
 }
 
-// 查看目标好友列表
+// ShowFriendList 查看目标好友列表
 func (i RelationServiceImpl) ShowFriendList(myId int64, userId int64) (dto.RelationList, error) {
 	//从redis中根据UserId取粉丝用户Id数组
 	fanKey := utils.FansUserKey + strconv.FormatInt(userId, 10)
-	fantmp := setup.Rdb.SMembers(setup.Rctx, fanKey).Val()
+	fanTmp := setup.Rdb.SMembers(setup.Rctx, fanKey).Val()
 	followKey := utils.FollowUserKey + strconv.FormatInt(userId, 10)
-	followtmp := setup.Rdb.SMembers(setup.Rctx, followKey).Val()
+	followTmp := setup.Rdb.SMembers(setup.Rctx, followKey).Val()
 	var tmp []string
-	for _, fanvalue := range fantmp {
-		for _, followvalue := range followtmp {
-			if fanvalue == followvalue {
-				tmp = append(tmp, fanvalue)
+	for _, fanValue := range fanTmp {
+		for _, followValue := range followTmp {
+			if fanValue == followValue {
+				tmp = append(tmp, fanValue)
 			}
 		}
 	}

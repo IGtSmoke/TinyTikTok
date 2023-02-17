@@ -56,7 +56,7 @@ func (c CommentServiceImpl) DeleteComment(commentId int64) (dto.CommentActionRes
 		return dto.CommentActionResponse{}, errors.New("comment not found")
 	}
 	dao.DeleteCommentById(commentId)
-	commentKey := utils.VideoCommentKey + strconv.FormatInt(int64(commentDTO.VideoID), 10)
+	commentKey := utils.VideoCommentKey + strconv.FormatInt(commentDTO.VideoID, 10)
 	//从redis中删除视频信息
 	if _, err := setup.Rdb.Pipelined(setup.Rctx, func(rdb redis.Pipeliner) error {
 		rdb.LRem(setup.Rctx, commentKey, 0, commentDTO)
